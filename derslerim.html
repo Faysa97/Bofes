@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borsa & Finans Eğitim Platformu</title>
+    <style>
+        :root {
+            --primary: #00CED1; /* Turkuaz */
+            --primary-dark: #008B8B;
+            --secondary: #212121; /* Siyah */
+            --light: #f5f5f5;
+            --gray: #777777;
+            --success: #4CAF50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary);
+            color: var(--light);
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Yan Menü Stili */
+        .sidebar {
+            width: 280px;
+            background-color: #1a1a1a;
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-header {
+            background-color: var(--primary);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .course-progress {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #444;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-filled {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%; /* JavaScript ile güncellenecek */
+            transition: width 0.5s ease;
+        }
+        
+        .lesson-list {
+            list-style: none;
+        }
+        
+        .lesson-item {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .lesson-item:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .lesson-number {
+            background-color: var(--primary);
+            color: var(--secondary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .lesson-completed .lesson-number {
+            background-color: var(--success);
+        }
+        
+        .lesson-title {
+            font-size: 14px;
+            flex-grow: 1;
+        }
+        
+        .lesson-duration {
+            color: var(--gray);
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .lesson-status {
+            width: 18px;
+            height: 18px;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lesson-completed .lesson-status::before {
+            content: "✓";
+            color: var(--success);
+        }
+        
+        .lesson-active {
+            background-color: rgba(0, 206, 209, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+        
+        /* Ana İçerik Alanı */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .video-container {
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/9;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .lesson-info {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .lesson-info h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .lesson-info p {
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .lesson-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .lesson-tag {
+            background-color: rgba(0, 206, 209, 0.1);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(0, 206, 209, 0.1);
+        }
+        
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .lesson-resources {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .resource-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-item:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .resource-icon {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .resource-title {
+            flex-grow: 1;
+        }
+        
+        .resource-download {
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Responsive Tasarım */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100%;
+                z-index: 100;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.open {
+                left: 0;
+            }
+            
+            .toggle-sidebar {
+                display: block;
+            }
+            
+            .main-content {
+                margin-top: 60px;
+            }
+            
+            .mobile-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background-color: var(--secondary);
+                padding: 10px 20px;
+                z-index: 99;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #333;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobil Menü için Header -->
+    <div class="mobile-header">
+        <button class="toggle-sidebar">☰</button>
+        
+       
+    </div>
+
+    <div class="container">
+        <!-- Yan Menü -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Borsa & Finans Eğitimi</h2>
+            </div>
+            
+            <div class="course-progress">
+                <div class="progress-info">
+                    <span>İlerleme Durumu</span>
+                    <span id="progress-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-filled" id="progress-bar"></div>
+                </div>
+            </div>
+            
+            <ul class="lesson-list" id="lesson-list">
+                <!-- Dersler JavaScript ile eklenecek -->
+            </ul>
+        </div>
+        
+        <!-- Ana İçerik -->
+        <div class="main-content">
+            <div class="header">
+                <h2 id="current-lesson-title">Derse Başlayın</h2>
+                <div class="user-info">
+                    <div class="user-avatar">OZ</div>
+                    <span>Merhaba,Osman </span>
+                </div>
+            </div>
+            
+            <div class="video-container">
+                <video class="video-player" id="video-player" controls>
+                    <source src="" type="video/mp4">
+                    Tarayıcınız video elementini desteklemiyor.
+                </video>
+            </div>
+            
+            <div class="lesson-info">
+                <h2 id="lesson-detail-title">Ders Başlığı</h2>
+                <p id="lesson-description">Ders açıklaması burada görünecektir. Lütfen sol menüden bir ders seçin.</p>
+                
+                <div class="lesson-tags">
+                    <span class="lesson-tag">Borsa</span>
+                    <span class="lesson-tag">Finans</span>
+                    <span class="lesson-tag">Yatırım</span>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button class="btn btn-outline" id="prev-btn">Önceki Ders</button>
+                    <button class="btn btn-primary" id="mark-complete-btn">Dersi Tamamla</button>
+                    <button class="btn btn-outline" id="next-btn">Sonraki Ders</button>
+                </div>
+            </div>
+            
+            <div class="lesson-resources">
+                <h3>Ders Kaynakları</h3>
+                <div class="resource-item">
+                    <span class="resource-icon">📄</span>
+                    <span class="resource-title">Ders Notları (PDF)</span>
+                    <span class="resource-download">İndir</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">📊</span>
+                    <span class="resource-title">Örnek Borsa Verileri (Excel)</span>
+                    <span class="resource-download">İndir</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">📝</span>
+                    <span class="resource-title">Alıştırma Soruları</span>
+                    <span class="resource-download">Görüntüle</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ders verileri
+        const lessons = [
+            {
+                id: 1,
+                title: "Borsaya Giriş ve Temel Kavramlar",
+                description: "Bu derste, borsa nedir, nasıl çalışır ve temel kavramlar hakkında bilgi edineceksiniz. Hisse senedi, lot, aracı kurum gibi kavramları öğreneceksiniz.",
+                duration: "15:30",
+                videoUrl: "/api/placeholder/640/360",
+                completed: false
+            },
+            {
+                id: 2,
+                title: "Hisse Senedi Analiz Yöntemleri",
+                description: "Temel analiz ve teknik analiz yöntemlerini öğreneceğiniz bu derste, bir hisse senedinin değerini belirleme yöntemlerini inceleyeceğiz.",
+                duration: "22:15",
+                videoUrl: "/api/placeholder/640/360",
+                completed: false
+            },
+            {
+                id: 3,
+                title: "Borsa Grafikleri Okuma",
+                description: "Grafik türleri, trend çizgileri, destek ve direnç noktaları gibi teknik analiz araçlarını öğreneceğiniz bu derste, grafikleri yorumlama becerinizi geliştireceksiniz.",
+                duration: "18:45",
+                videoUrl: "/api/placeholder/640/360",
+                completed: false
+            },
+            {
+                id: 4,
+                title: "Yatırım Stratejileri",
+                description: "Uzun vadeli yatırım, günlük alım-satım (day trading), değer yatırımı gibi farklı yatırım stratejilerini karşılaştıracağız.",
+                duration: "20:10",
+                videoUrl: "/api/placeholder/640/360",
+                completed: false
+            },
+            {
+                id: 5,
+                title: "Risk Yönetimi",
+                description: "Portföy çeşitlendirme, stop-loss emirleri ve risk/ödül oranı gibi risk yönetimi tekniklerini öğreneceğiz.",
+                duration: "16:50",
+                videoUrl: "/api/placeholder/640/360",
+                completed: false
+            },
+            {
+                id: 6,
+                title: "Ekonomik Göstergeler ve Borsa İlişkisi",
+                description: "GSYH, enflasyon, faiz oranları gibi ekonomik göstergelerin borsa üzerindeki etkilerini inceleyeceğiz.",
+                duration: "23:30",
+                videoUrl: "/api/placeholder/640/360",
+                completed: false
+            }
+        ];
+
+        // DOM elementleri
+        const lessonList = document.getElementById('lesson-list');
+        const videoPlayer = document.getElementById('video-player');
+        const currentLessonTitle = document.getElementById('current-lesson-title');
+        const lessonDetailTitle = document.getElementById('lesson-detail-title');
+        const lessonDescription = document.getElementById('lesson-description');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const markCompleteBtn = document.getElementById('mark-complete-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const toggleSidebarBtn = document.querySelector('.toggle-sidebar');
+        const sidebar = document.querySelector('.sidebar');
+
+        // Geçerli ders indeksi
+        let currentLessonIndex = 0;
+
+        // Dersleri listele
+        function renderLessons() {
+            lessonList.innerHTML = '';
+            
+            lessons.forEach((lesson, index) => {
+                const lessonEl = document.createElement('li');
+                lessonEl.className = `lesson-item ${lesson.completed ? 'lesson-completed' : ''} ${index === currentLessonIndex ? 'lesson-active' : ''}`;
+                lessonEl.innerHTML = `
+                    <div class="lesson-number">${lesson.id}</div>
+                    <div class="lesson-title">${lesson.title}</div>
+                    <div class="lesson-duration">${lesson.duration}</div>
+                    <div class="lesson-status"></div>
+                `;
+                
+                lessonEl.addEventListener('click', () => {
+                    loadLesson(index);
+                });
+                
+                lessonList.appendChild(lessonEl);
+            });
+            
+            updateProgress();
+        }
+
+        // İlerleme durumunu güncelle
+        function updateProgress() {
+            const completedCount = lessons.filter(lesson => lesson.completed).length;
+            const percentage = Math.round((completedCount / lessons.length) * 100);
+            
+            progressBar.style.width = `${percentage}%`;
+            progressPercentage.textContent = `${percentage}%`;
+        }
+
+        // Ders yükle
+        function loadLesson(index) {
+            if (index < 0 || index >= lessons.length) return;
+            
+            currentLessonIndex = index;
+            const lesson = lessons[index];
+            
+            // Video ve ders bilgilerini güncelle
+            videoPlayer.src = lesson.videoUrl;
+            currentLessonTitle.textContent = lesson.title;
+            lessonDetailTitle.textContent = lesson.title;
+            lessonDescription.textContent = lesson.description;
+            
+            // Navigasyon butonlarını güncelle
+            prevBtn.classList.toggle('btn-disabled', index === 0);
+            nextBtn.classList.toggle('btn-disabled', index === lessons.length - 1);
+            
+            // Tamamla butonunu güncelle
+            markCompleteBtn.textContent = lesson.completed ? "Tamamlandı" : "Dersi Tamamla";
+            markCompleteBtn.classList.toggle('btn-primary', !lesson.completed);
+            markCompleteBtn.classList.toggle('btn-outline', lesson.completed);
+            
+            // Aktif dersi güncelle
+            document.querySelectorAll('.lesson-item').forEach((item, i) => {
+                item.classList.toggle('lesson-active', i === index);
+            });
+            
+            // Videoyu oynat
+            videoPlayer.load();
+        }
+
+        // Önceki derse git
+        prevBtn.addEventListener('click', () => {
+            if (currentLessonIndex > 0) {
+                loadLesson(currentLessonIndex - 1);
+            }
+        });
+
+        // Sonraki derse git
+        nextBtn.addEventListener('click', () => {
+            if (currentLessonIndex < lessons.length - 1) {
+                loadLesson(currentLessonIndex + 1);
+            }
+        });
+
+        // Dersi tamamla/tamamlanmadı olarak işaretle
+        markCompleteBtn.addEventListener('click', () => {
+            const lesson = lessons[currentLessonIndex];
+            lesson.completed = !lesson.completed;
+            
+            renderLessons();
+            loadLesson(currentLessonIndex);
+        });
+
+        // Mobil menüyü aç/kapat
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Dışarı tıklandığında menüyü kapat
+        document.addEventListener('click', (e) => {
+            if (sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && 
+                e.target !== toggleSidebarBtn) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Sayfa yüklendiğinde
+        window.addEventListener('load', () => {
+            renderLessions();
+            loadLesson(0);
+        });
+
+        // Yazım hatası düzeltme
+        window.addEventListener('load', () => {
+            renderLessons();
+            loadLesson(0);
+        });
+    </script>
+</body>
+</html>

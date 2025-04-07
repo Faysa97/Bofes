@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOFES - Profil Sayfası</title>
+    <style>
+        :root {
+            --turquoise: #00B3B3;
+            --dark-turquoise: #008080;
+            --black: #121212;
+            --dark-gray: #1E1E1E;
+            --medium-gray: #333333;
+            --light-gray: #454545;
+            --white: #FFFFFF;
+            --off-white: #E0E0E0;
+            --sidebar-width: 280px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+        
+        /* Ana içerik bölümü wrapper */
+        .main-wrapper {
+            width: calc(100% - var(--sidebar-width));
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            overflow-y: auto;
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: var(--black);
+            padding: 25px 24px;
+            border-bottom: 2px solid var(--turquoise);
+            min-height: 120px;
+            position: relative;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 28px;
+            color: var(--turquoise);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-buttons .btn {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .nav-buttons .btn:hover {
+            color: var(--turquoise);
+        }
+
+
+        .nav-buttons .btn1 {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .nav-buttons .btn1:hover {
+            color: var(--turquoise);
+        }
+        
+        .btn.active {
+            color: var(--turquoise);
+            font-weight: bold;
+        }
+        
+        /* Container */
+        .container {
+            flex: 1;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 24px;
+        }
+        
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .nav-arrows {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .arrow {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .arrow:hover {
+            background-color: var(--turquoise);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--off-white);
+            border-bottom: 2px solid var(--turquoise);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        
+        /* Profil Sayfası Özellikleri */
+        .profile-header {
+            background-color: var(--black);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            border-left: 4px solid var(--turquoise);
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background-color: var(--medium-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--turquoise);
+            font-size: 48px;
+            flex-shrink: 0;
+        }
+        
+        .profile-details {
+            flex-grow: 1;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .profile-status {
+            color: var(--turquoise);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .profile-info {
+            display: flex;
+            gap: 24px;
+            margin-top: 12px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--off-white);
+        }
+        
+        .edit-profile-button {
+            background-color: var(--turquoise);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        
+        .edit-profile-button:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        /* Tab sistemleri */
+        .profile-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 24px;
+            background-color: var(--black);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+        
+        .profile-tab {
+            padding: 14px 24px;
+            background-color: var(--medium-gray);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .profile-tab:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .profile-tab.active {
+            background-color: var(--turquoise);
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        /* Profil içerik bölümleri */
+        .profile-content {
+            margin-bottom: 24px;
+        }
+        
+        .profile-section {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 8px;
+        }
+        
+        .section-header h3 {
+            font-size: 18px;
+            color: var(--turquoise);
+        }
+        
+        /* İstatistikler */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .stat-card {
+            background-color: var(--black);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            border-bottom: 3px solid var(--turquoise);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--turquoise);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--off-white);
+        }
+        
+        /* Gelişim Grafiği */
+        .progress-chart {
+            background-color: var(--black);
+            border-radius: 8px;
+            padding: 16px;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 70%;
+            background-color: var(--turquoise);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+        
+        .progress-bar:nth-child(2) {
+            height: 85%;
+        }
+        
+        .progress-bar:nth-child(3) {
+            height: 60%;
+        }
+        
+        .progress-bar:nth-child(4) {
+            height: 90%;
+        }
+        
+        .progress-bar:nth-child(5) {
+            height: 75%;
+        }
+        
+        .progress-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        
+        /* Recent activity */
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            background-color: var(--turquoise);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .activity-details {
+            flex-grow: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--black);
+            padding: 24px;
+            border-left: 1px solid var(--medium-gray);
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1001;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            margin-top: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--medium-gray);
+            border-radius: 50%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--turquoise);
+        }
+        
+        .user-icon {
+            color: var(--off-white);
+            font-size: 24px;
+        }
+        
+        .user-info h3 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            color: var(--turquoise);
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 16px;
+        }
+        
+        .sidebar-menu a {
+            color: var(--off-white);
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: color 0.3s;
+        }
+        
+        .sidebar-menu a:hover {
+            color: var(--turquoise);
+        }
+        
+        .sidebar-menu a.active {
+            color: var(--turquoise);
+            font-weight: 600;
+        }
+        
+        /* Form alanları */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--off-white);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            color: var(--white);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--turquoise);
+        }
+        
+        /* Responsive tasarım */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .main-wrapper {
+                width: 100%;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-top: 1px solid var(--medium-gray);
+                right: auto;
+                top: auto;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-info {
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ana içerik wrapper'ı -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header>
+            <!-- Üst kısım -->
+            <div class="header-top">
+                <div class="logo">BOFES</div>
+                
+                <div class="nav-buttons">
+                    <button class="btn active">👤 Profil</button>
+                    <button class="btn1">🔔 Bildirimler</button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Container -->
+        <div class="container">
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="main-nav">
+                    <div class="nav-arrows">
+                        <div class="arrow">←</div>
+                        <div class="arrow">→</div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Profil Sayfası</h2>
+                
+                <!-- Profil Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-details">
+                        <h1 class="profile-name">Osman Zorlu</h1>
+                        <div class="profile-status">Uzman Kullanıcı</div>
+                        <p>Finans ve borsa alanlarında 5 yıllık tecrübeye sahibim. BOFES platformunda 1 yıldır aktif üyeyim.</p>
+                        <div class="profile-info">
+                            <div class="info-item">📧 osman.zorlu@mail.com</div>
+                            <div class="info-item">📱 +90 532 123 45 67</div>
+                            <div class="info-item">📍 Çorum, Türkiye</div>
+                        </div>
+                        <button class="edit-profile-button">Profili Düzenle</button>
+                    </div>
+                </div>
+                
+                <!-- Tab Navigation -->
+                <div class="profile-tabs">
+                    <div class="profile-tab active">Genel Bakış</div>
+                    <div class="profile-tab">Eğitimlerim</div>
+                    <div class="profile-tab">İstatistikler</div>
+                    <div class="profile-tab">Ayarlar</div>
+                </div>
+                
+                <!-- Profil İçeriği -->
+                <div class="profile-content">
+                    <!-- İstatistikler -->
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3>İstatistikler</h3>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value">28</div>
+                                <div class="stat-label">Tamamlanan Eğitim</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">124</div>
+                                <div class="stat-label">İzlenen Video</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">16</div>
+                                <div class="stat-label">Katılınan Canlı Yayın</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gelişim Grafiği -->
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3>Gelişim Grafiği</h3>
+                        </div>
+                        <p style="margin-bottom: 16px;">Son 5 ayda platformda geçirdiğiniz süre (saat):</p>
+                        <div class="progress-chart">
+                            <div class="progress-bar">
+                                <div class="progress-label">Ocak</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-label">Şubat</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-label">Mart</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-label">Nisan</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-label">Mayıs</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Son Aktiviteler -->
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3>Son Aktiviteler</h3>
+                        </div>
+                        <ul class="activity-list">
+                            <li class="activity-item">
+                                <div class="activity-icon">📺</div>
+                                <div class="activity-details">
+                                    <div class="activity-title">"Finansa Giriş" videosunu izlediniz</div>
+                                    <div class="activity-time">2 saat önce</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">📝</div>
+                                <div class="activity-details">
+                                    <div class="activity-title">"Haftalık Ekonomi Değerlendirmesi" dersine katıldınız</div>
+                                    <div class="activity-time">Dün, 18:30</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">📊</div>
+                                <div class="activity-details">
+                                    <div class="activity-title">"Borsa Analizleri" kursunu tamamladınız</div>
+                                    <div class="activity-time">3 gün önce</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <div class="activity-icon">💬</div>
+                                <div class="activity-details">
+                                    <div class="activity-title">"Finans ve Borsa İncelemeleri" forumunda yorum yaptınız</div>
+                                    <div class="activity-time">5 gün önce</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Profil Ayarları -->
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3>Hesap Bilgileri</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" class="form-input" value="Osman Zorlu">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">E-posta</label>
+                            <input type="email" class="form-input" value="osman.zorlu@mail.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefon</label>
+                            <input type="tel" class="form-input" value="+90 532 123 45 67">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Lokasyon</label>
+                            <input type="text" class="form-input" value="İstanbul, Türkiye">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hakkımda</label>
+                            <textarea class="form-input" rows="4">Finans ve borsa alanlarında 5 yıllık tecrübeye sahibim. BOFES platformunda 2 yıldır aktif üyeyim.</textarea>
+                        </div>
+                        <button class="edit-profile-button">Değişiklikleri Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="avatar">
+                <div class="user-icon">👤</div>
+            </div>
+            <div class="user-info">
+                <h3>Osman Zorlu</h3>
+                <p>Uzman Kullanıcı</p>
+            </div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="derslerim.html">Derslerim</a></li>
+            <li><a href="notlarim.html">Notlarım</a></li>
+            <li><a href="haberlerim.html">Haberlerim</a></li>
+            <li><a href="arastirmalar.html">Araştırmalar</a></li>
+            <li><a href="duyurular.html">Duyurular</a></li>
+        </ul>
+    </div>
+
+    <script>
+ document.querySelector('.btn1').addEventListener('click', function(event) {
+           
+           window.location.href = "bildirimler.html"; 
+       });
+</script>
+
+</body>
+</html>

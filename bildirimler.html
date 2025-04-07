@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildirimler - BOFES</title>
+    <style>
+        :root {
+            --turquoise: #00B3B3;
+            --dark-turquoise: #008080;
+            --black: #121212;
+            --dark-gray: #1E1E1E;
+            --medium-gray: #333333;
+            --light-gray: #454545;
+            --white: #FFFFFF;
+            --off-white: #E0E0E0;
+            --sidebar-width: 280px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            display: flex;
+            flex-direction: row; /* Yatay düzen */
+            min-height: 100vh;
+        }
+        
+        /* Ana içerik bölümü wrapper */
+        .main-wrapper {
+            width: calc(100% - var(--sidebar-width));
+            display: flex;
+            flex-direction: column;
+            height: auto; /* İçeriğin doğal yüksekliği */
+            overflow-y: auto; /* İçerik fazla olursa scroll yapabilsin */
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: var(--black);
+            padding: 25px 24px;
+            border-bottom: 2px solid var(--turquoise);
+            min-height: 120px;
+            position: relative; /* Static pozisyona yakın - sayfayla birlikte kaydırılacak */
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        /* Üst kısım için container */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        /* Alt kısım için container */
+        .header-bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 28px;
+            color: var(--turquoise);
+        }
+        
+        /* Kayan Haber Slider Styles */
+        .news-slider-container {
+            width: 500px;
+            position: relative;
+            overflow: hidden;
+            height: 45px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+        }
+        
+        .news-slider {
+            display: flex;
+            position: absolute;
+            left: 0;
+            transition: transform 0.5s ease;
+            width: 2500px;
+        }
+        
+        .news-item {
+            min-width: 500px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 16px;
+            color: var(--white);
+            font-size: 15px;
+        }
+        
+        .news-item strong {
+            color: var(--turquoise);
+            margin-right: 8px;
+        }
+        
+        .news-controls {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+        
+        .news-controls button {
+            width: 22px;
+            height: 22px;
+            background-color: var(--turquoise);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .news-controls button:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-buttons .btn {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .nav-buttons .btn:hover {
+            color: var(--turquoise);
+        }
+        
+        .nav-buttons .btn1 {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .nav-buttons .btn1:hover {
+            color: var(--turquoise);
+        }
+
+
+        /* Main Container */
+        .container {
+            flex: 1;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 24px;
+        }
+        
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .nav-arrows {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .arrow {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .arrow:hover {
+            background-color: var(--turquoise);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--off-white);
+            border-bottom: 2px solid var(--turquoise);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--black);
+            padding: 24px;
+            border-left: 1px solid var(--medium-gray);
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1001;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            margin-top: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--medium-gray);
+            border-radius: 50%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--turquoise);
+        }
+        
+        .user-icon {
+            color: var(--off-white);
+            font-size: 24px;
+        }
+        
+        .user-info h3 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            color: var(--turquoise);
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 16px;
+        }
+        
+        .sidebar-menu a {
+            color: var(--off-white);
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: color 0.3s;
+        }
+        
+        .sidebar-menu a:hover {
+            color: var(--turquoise);
+        }
+        
+        .sidebar-menu a.active {
+            color: var(--turquoise);
+            font-weight: 600;
+        }
+        
+        /* Live Support */
+        .live-support {
+            position: fixed;
+            bottom: 24px;
+            right: calc(var(--sidebar-width) + 24px);
+            background-color: var(--turquoise);
+            color: var(--white);
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 179, 179, 0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        
+        .live-support:hover {
+            background-color: var(--dark-turquoise);
+        }
+
+        /* YENİ: Bildirimler Sayfası Stilleri */
+        .notification-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            background-color: var(--medium-gray);
+            color: var(--off-white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .filter-btn.active {
+            background-color: var(--turquoise);
+            color: var(--white);
+        }
+        
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .notification-item {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            position: relative;
+            border-left: 4px solid var(--turquoise);
+            transition: transform 0.2s;
+        }
+
+        .notification-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .notification-item.unread {
+            background-color: var(--black);
+        }
+        
+        .notification-item.unread::after {
+            content: "";
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--turquoise);
+            border-radius: 50%;
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon.event {
+            background-color: rgba(0, 179, 179, 0.2);
+            color: var(--turquoise);
+        }
+        
+        .notification-icon.message {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .notification-icon.alert {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .notification-icon.info {
+            background-color: rgba(13, 110, 253, 0.2);
+            color: #0d6efd;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .notification-time {
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        
+        .notification-message {
+            color: var(--off-white);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .notification-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .notification-action {
+            color: var(--turquoise);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .notification-action:hover {
+            text-decoration: underline;
+        }
+        
+        .notification-badge {
+            display: inline-block;
+            background-color: var(--turquoise);
+            color: var(--white);
+            font-size: 12px;
+            border-radius: 12px;
+            padding: 2px 8px;
+            margin-left: 8px;
+        }
+        
+        .upcoming-events {
+            margin-top: 32px;
+        }
+        
+        .event-card {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--turquoise);
+            transition: transform 0.2s;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .event-title {
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .event-date {
+            background-color: var(--turquoise);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .event-details {
+            margin-bottom: 12px;
+            color: var(--off-white);
+        }
+        
+        .event-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .event-action {
+            color: var(--turquoise);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .event-action:hover {
+            text-decoration: underline;
+        }
+        
+        .load-more {
+            background-color: transparent;
+            border: 2px solid var(--turquoise);
+            color: var(--turquoise);
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .load-more:hover {
+            background-color: var(--turquoise);
+            color: var(--white);
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 0;
+            color: var(--off-white);
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--turquoise);
+        }
+        
+        /* Responsive tasarım için medya sorguları */
+        @media (max-width: 1024px) {
+            .news-slider-container {
+                width: 400px;
+            }
+            
+            .news-item {
+                min-width: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .main-wrapper {
+                width: 100%;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-left: none;
+                border-top: 1px solid var(--medium-gray);
+                right: auto;
+                top: auto;
+            }
+            
+            .live-support {
+                right: 24px;
+            }
+            
+            .notification-filters {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ana içerik wrapper'ı -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header>
+            <!-- Üst kısım -->
+            <div class="header-top">
+                <div class="logo">BOFES</div>
+                
+                <div class="nav-buttons">
+                    <button class="btn">👤 Profil</button>
+                    <button class="btn1">🔔 Bildirimler</button>
+                </div>
+            </div>
+            
+            <!-- Alt kısım -->
+            <div class="header-bottom">
+                <!-- Kayan Finans Haberleri -->
+                <div class="news-slider-container">
+                    <div class="news-slider" id="newsSlider">
+                        <div class="news-item"><strong>BIST100:</strong> Borsa İstanbul günü %1.2 yükselişle kapattı</div>
+                        <div class="news-item"><strong>Dolar/TL:</strong> Dolar 32.45 seviyesinde işlem görüyor</div>
+                        <div class="news-item"><strong>Euro/TL:</strong> Euro 35.10 seviyesinde işlem görüyor</div>
+                        <div class="news-item"><strong>Altın:</strong> Gram altın 2.350 TL seviyesinde</div>
+                        <div class="news-item"><strong>Bitcoin:</strong> BTC 59.000 dolar seviyesinde</div>
+                    </div>
+                    <div class="news-controls">
+                        <button onclick="prevNews()">◀</button>
+                        <button onclick="nextNews()">▶</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="main-nav">
+                    <div class="nav-arrows">
+                        <div class="arrow" onclick="window.location.href='index.html'">←</div>
+                        <div class="arrow">→</div>
+                    </div>
+                </div>
+                
+                <!-- Bildirimler Başlık -->
+                <h2 class="section-title">Bildirimler <span class="notification-badge">5</span></h2>
+                
+                <!-- Bildirim Filtreleme Seçenekleri -->
+                <div class="notification-filters">
+                    <button class="filter-btn active">Tümü</button>
+                    <button class="filter-btn">Okunmamışlar</button>
+                    <button class="filter-btn">Etkinlikler</button>
+                    <button class="filter-btn">Mesajlar</button>
+                    <button class="filter-btn">Uyarılar</button>
+                </div>
+                
+                <!-- Bildirim Listesi -->
+                <div class="notification-list">
+                    <!-- Okunmamış Bildirim -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon event">📅</div> 
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <span>Yeni Etkinlik Eklendi</span>
+                                <span class="notification-time">Bugün, 14:30</span>
+                            </div>
+                            <div class="notification-message">
+                                "Finansal Okuryazarlık Semineri" etkinliği takvime eklendi. Bugün saat 20:00'da gerçekleşecek.
+                            </div>
+                            <div class="notification-actions">
+                                <a href="#" class="notification-action">Takvime Ekle</a>
+                                <a href="#" class="notification-action">Detaylar</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Okunmamış Mesaj -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon message">✉️</div>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <span>Osman Zorlu'dan yeni mesaj</span>
+                                <span class="notification-time">Bugün, 13:45</span>
+                            </div>
+                            <div class="notification-message">
+                                Yarınki Borsa Analizi dersine katılacak mısınız? Ders materyallerini önceden paylaşmak istiyorum.
+                            </div>
+                            <div class="notification-actions">
+                                <a href="#" class="notification-action">Yanıtla</a>
+                                <a href="#" class="notification-action">Okundu İşaretle</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Okunmamış Uyarı -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon alert">⚠️</div>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <span>Önemli Duyuru</span>
+                                <span class="notification-time">Bugün, 11:20</span>
+                            </div>
+                            <div class="notification-message">
+                                Bugün 15:00'da gerçekleşecek olan "Temel Borsa Analizi" dersi teknik sorunlar nedeniyle 16:30'a ertelenmiştir.
+                            </div>
+                            <div class="notification-actions">
+                                <a href="#" class="notification-action">Anladım</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Okunmuş Bildirim -->
+                    <div class="notification-item">
+                        <div class="notification-icon info">📊</div>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <span>Yeni İçerik Eklendi</span>
+                                <span class="notification-time">Dün, 16:15</span>
+                            </div>
+                            <div class="notification-message">
+                                "Hisse Senedi Teknik Analizi" kursuna 3 yeni video eklendi. Hemen izlemeye başlayabilirsiniz.
+                            </div>
+                            <div class="notification-actions">
+                                <a href="#" class="notification-action">Videoları İzle</a>
+                                <a href="#" class="notification-action">Sonra İzle</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Okunmuş Bildirim -->
+                    <div class="notification-item">
+                        <div class="notification-icon event">🏆</div>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <span>Kurs Tamamlandı</span>
+                                <span class="notification-time">2 gün önce</span>
+                            </div>
+                            <div class="notification-message">
+                                "Finansal Planlama Temelleri" kursunu başarıyla tamamladınız. Sertifikanızı profilinizden indirebilirsiniz.
+                            </div>
+                            <div class="notification-actions">
+                                <a href="#" class="notification-action">Sertifikayı İndir</a>
+                                <a href="#" class="notification-action">Değerlendirme Yap</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Yükle Butonu -->
+                <button class="load-more">Daha Fazla Yükle</button>
+                
+                <!-- Yaklaşan Etkinlikler -->
+                <h2 class="section-title">Yaklaşan Etkinlikler</h2>
+                
+                <div class="upcoming-events">
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-title">Finansal Okuryazarlık Semineri</div>
+                            <div class="event-date">Bugün, 20:00</div>
+                        </div>
+                        <div class="event-details">
+                            Osman Zorlu ile temel finans kavramları ve kişisel finansal planlama üzerine interaktif bir seminer.
+                        </div>
+                        <div class="event-actions">
+                            <a href="#" class="event-action">Katıl</a>
+                            <a href="#" class="event-action">Takvime Ekle</a>
+                        </div>
+                    </div>
+                    
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-title">Haftalık Piyasa Değerlendirmesi</div>
+                            <div class="event-date">Yarın, 18:30</div>
+                        </div>
+                        <div class="event-details">
+                            Haftalık ekonomik gelişmelerin değerlendirileceği ve gelecek hafta için öngörülerin paylaşılacağı canlı yayın.
+                        </div>
+                        <div class="event-actions">
+                            <a href="#" class="event-action">Hatırlatıcı Kur</a>
+                            <a href="#" class="event-action">Detaylar</a>
+                        </div>
+                    </div>
+                    
+                    <div class="event-card">
+                        <div class="event-header">
+                            <div class="event-title">Borsa İstanbul Analizi</div>
+                            <div class="event-date">5 Nisan, 19:00</div>
+                        </div>
+                        <div class="event-details">
+                            Borsa İstanbul'daki önemli hisse senetlerinin teknik ve temel analizlerinin yapılacağı detaylı inceleme.
+                        </div>
+                        <div class="event-actions">
+                            <a href="#" class="event-action">İlgimi Çekiyor</a>
+                            <a href="#" class="event-action">Takvime Ekle</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="avatar">
+                <div class="user-icon">👤</div>
+            </div>
+            <div class="user-info">
+                <h3>Osman Zorlu</h3>
+                <p>Kullanıcı</p>
+            </div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="derslerim.html">Derslerim</a></li>
+            <li><a href="notlarim.html">Notlarım</a></li>
+            <li><a href="haberlerim.html">Haberlerim</a></li>
+            <li><a href="arastirmalar.html">Araştırmalar</a></li>
+            <li><a href="duyurular.html">Duyurular</a></li>
+            <li><a href="bildirimler.html" class="active">Bildirimler</a></li>
+        </ul>
+    </div>
+    
+    <!-- Live Support -->
+    <div class="live-support">CANLI DESTEK</div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Slider için JavaScript
+        let currentSlide = 0;
+        const slider = document.getElementById('newsSlider');
+        const slides = document.querySelectorAll('.news-item');
+        const slideWidth = 500; // Her haber öğesinin genişliği
+        const totalSlides = slides.length;
+        
+        // Otomatik kaydırma için interval
+        let slideInterval = setInterval(nextNews, 5000); // 5 saniyede bir sonraki habere geçer
+        
+        function nextNews() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSliderPosition();
+        }
+        
+        function prevNews() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSliderPosition();
+        }
+        
+        function updateSliderPosition() {
+            // Interval'i resetle, böylece manuel tıklamadan sonra tekrar başlasın
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextNews, 5000);
+            
+            // Slider pozisyonunu güncelle
+            slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+        }
+        
+        // İlk yükleme sırasında otomatik oynatmayı başlat
+        updateSliderPosition();
+        
+        // Ekran boyutu değiştiğinde slideWidth değerini güncelle
+        function updateSlideWidth() {
+            const newsContainer = document.querySelector('.news-slider-container');
+            if (window.innerWidth <= 1024 && window.innerWidth > 768) {
+                return 400; // Tablet genişliği
+            } else {
+                return 500; // Varsayılan genişlik
+            }
+        }
+        
+        window.addEventListener('resize', function() {
+            const newSlideWidth = updateSlideWidth();
+            if (newSlideWidth !== slideWidth) {
+                slideWidth = newSlideWidth;
+                updateSliderPosition();
+            }
+        });
+        
+        // Filtreleme butonları için event listener
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Tüm butonlardan active sınıfını kaldır
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Tıklanan butona active sınıfını ekle
+                this.classList.add('active');
+                
+                // Burada filtreleme mantığı eklenebilir
+                // Örneğin: Sadece okunmamış bildirimleri göster vb.
+            });
+        });
+        
+       // Burada bildirim okuma işlemini gerçekleştir
+       const notificationItem = button.closest('.notification-item');
+                notificationItem.classList.remove('unread');
+        
+        
+        
+        // "Daha Fazla Yükle" butonu için event listener
+        const loadMoreButton = document.querySelector('.load-more');
+        
+        loadMoreButton.addEventListener('click', function() {
+            // Burada daha fazla bildirim yükleme mantığı eklenebilir
+            // Örnek olarak yeni bildirimler ekleyelim
+            const notificationList = document.querySelector('.notification-list');
+            
+            // Yeni bildirim oluştur
+            const newNotification = document.createElement('div');
+            newNotification.className = 'notification-item';
+            newNotification.innerHTML = `
+                <div class="notification-icon info">📱</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <span>Platform Güncellemesi</span>
+                        <span class="notification-time">1 hafta önce</span>
+                    </div>
+                    <div class="notification-message">
+                        BOFES platformu yeni özelliklerle güncellendi. Yeni özellikleri keşfedin.
+                    </div>
+                    <div class="notification-actions">
+                        <a href="#" class="notification-action">Detaylar</a>
+                    </div>
+                </div>
+            `;
+            
+            // Listeye ekle
+            notificationList.appendChild(newNotification);
+            
+            // Bildirim sayacını güncelle
+            const badge = document.querySelector('.notification-badge');
+            let currentCount = parseInt(badge.textContent);
+            badge.textContent = currentCount + 1;
+        });
+        
+        // Etkinlik etkileşimleri için event listener
+        const eventActions = document.querySelectorAll('.event-action');
+        
+        eventActions.forEach(action => {
+            action.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Takvime ekle butonu için
+                if (this.textContent === 'Takvime Ekle') {
+                    alert('Etkinlik takviminize eklendi!');
+                }
+                
+                // Katıl butonu için
+                if (this.textContent === 'Katıl') {
+                    alert('Etkinliğe katılım sağlanıyor...');
+                    // Burada etkinliğe katılım sayfasına yönlendirme yapılabilir
+                }
+                
+                // Hatırlatıcı kur butonu için
+                if (this.textContent === 'Hatırlatıcı Kur') {
+                    alert('Etkinlik için hatırlatıcı kuruldu!');
+                }
+            });
+        });
+        
+        // Responsive sidebar için menü toggle butonu ekle
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                // Eğer header-top içinde zaten menü toggle butonu yoksa ekle
+                if (!document.querySelector('.menu-toggle')) {
+                    const navButtons = document.querySelector('.nav-buttons');
+                    const menuToggle = document.createElement('button');
+                    menuToggle.className = 'btn menu-toggle';
+                    menuToggle.innerHTML = '☰ Menü';
+                    menuToggle.addEventListener('click', function() {
+                        const sidebar = document.querySelector('.sidebar');
+                        sidebar.classList.toggle('show');
+                    });
+                    
+                    navButtons.prepend(menuToggle);
+                }
+            } else {
+                // Büyük ekranlarda menü toggle butonunu kaldır
+                const menuToggle = document.querySelector('.menu-toggle');
+                if (menuToggle) {
+                    menuToggle.remove();
+                }
+            }
+        });
+        
+        // Sayfa yüklendiğinde responsive kontrolleri çalıştır
+        window.dispatchEvent(new Event('resize'));
+
+        document.querySelector('.btn').addEventListener('click', function(event) {
+           
+           window.location.href = "profil.html"; 
+       });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOFES - Notlarım</title>
+    <style>
+        :root {
+            --turquoise: #00B3B3;
+            --dark-turquoise: #008080;
+            --black: #121212;
+            --dark-gray: #1E1E1E;
+            --medium-gray: #333333;
+            --light-gray: #454545;
+            --white: #FFFFFF;
+            --off-white: #E0E0E0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-gray);
+            color: var(--white);
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--black);
+            padding: 15px 24px;
+            border-bottom: 2px solid var(--turquoise);
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--turquoise);
+            cursor: pointer;
+        }
+        
+        /* Kayan Haber Slider Styles */
+        .news-slider-container {
+            width: 400px;
+            position: relative;
+            overflow: hidden;
+            height: 40px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+        }
+        
+        .news-slider {
+            display: flex;
+            position: absolute;
+            left: 0;
+            transition: transform 0.5s ease;
+            width: 2000px;
+        }
+        
+        .news-item {
+            min-width: 400px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 16px;
+            color: var(--white);
+            font-size: 14px;
+        }
+        
+        .news-item strong {
+            color: var(--turquoise);
+            margin-right: 8px;
+        }
+        
+        .news-controls {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+        
+        .news-controls button {
+            width: 20px;
+            height: 20px;
+            background-color: var(--turquoise);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .news-controls button:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-buttons .btn {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-buttons .btn:hover {
+            color: var(--turquoise);
+        }
+        
+        /* Main Container */
+        .container {
+            display: flex;
+            height: calc(100vh - 65px);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .nav-arrows {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .arrow {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .arrow:hover {
+            background-color: var(--turquoise);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--off-white);
+            border-bottom: 2px solid var(--turquoise);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            background-color: var(--medium-gray);
+            color: var(--white);
+        }
+        
+        .search-input::placeholder {
+            color: var(--off-white);
+        }
+        
+        .search-btn {
+            padding: 10px 16px;
+            background-color: var(--turquoise);
+            border: none;
+            border-radius: 0 4px 4px 0;
+            color: var(--white);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        /* Note Categories */
+        .note-categories {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            background-color: var(--medium-gray);
+            border: none;
+            border-radius: 20px;
+            color: var(--off-white);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .category-btn.active {
+            background-color: var(--turquoise);
+            color: var(--white);
+        }
+        
+        /* Notes Grid */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .note-card {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            transition: transform 0.3s;
+            border-left: 4px solid var(--turquoise);
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 179, 179, 0.2);
+        }
+        
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        
+        .note-preview {
+            color: var(--off-white);
+            font-size: 14px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            flex-grow: 1;
+        }
+        
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        
+        .note-actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .note-action-btn {
+            width: 24px;
+            height: 24px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--off-white);
+            transition: color 0.3s;
+        }
+        
+        .note-action-btn:hover {
+            color: var(--turquoise);
+        }
+        
+        /* Add Note Button */
+        .add-note-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--turquoise);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 179, 179, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .add-note-btn:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        /* Recent Notes */
+        .recent-notes {
+            margin-bottom: 32px;
+        }
+        
+        .recent-note-list {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .recent-note-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .recent-note-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recent-note-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .recent-note-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--off-white);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--black);
+            padding: 24px;
+            border-left: 1px solid var(--medium-gray);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--medium-gray);
+            border-radius: 50%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--turquoise);
+        }
+        
+        .user-icon {
+            color: var(--off-white);
+            font-size: 24px;
+        }
+        
+        .user-info h3 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            color: var(--turquoise);
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 16px;
+        }
+        
+        .sidebar-menu a {
+            color: var(--off-white);
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: color 0.3s;
+        }
+        
+        .sidebar-menu a:hover {
+            color: var(--turquoise);
+        }
+        
+        .sidebar-menu a.active {
+            color: var(--turquoise);
+            font-weight: 600;
+        }
+        
+        /* Note Stats Widget */
+        .note-stats {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+        
+        .stats-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--turquoise);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .stat-label {
+            color: var(--off-white);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'">BOFES</div>
+        
+        <!-- Kayan Finans Haberleri -->
+        <div class="news-slider-container">
+            <div class="news-slider" id="newsSlider">
+                <div class="news-item"><strong>BIST100:</strong> Borsa İstanbul günü %1.2 yükselişle kapattı</div>
+                <div class="news-item"><strong>Dolar/TL:</strong> Dolar 32.45 seviyesinde işlem görüyor</div>
+                <div class="news-item"><strong>Euro/TL:</strong> Euro 35.10 seviyesinde işlem görüyor</div>
+                <div class="news-item"><strong>Altın:</strong> Gram altın 2.350 TL seviyesinde</div>
+                <div class="news-item"><strong>Bitcoin:</strong> BTC 59.000 dolar seviyesinde</div>
+            </div>
+            <div class="news-controls">
+                <button onclick="prevNews()">◀</button>
+                <button onclick="nextNews()">▶</button>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="btn">👤 Profil</button>
+            <button class="btn">🔔 Bildirimler</button>
+        </div>
+    </header>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="main-nav">
+                <div class="nav-arrows">
+                    <div class="arrow" onclick="window.location.href='index.html'">←</div>
+                    <div class="arrow">→</div>
+                </div>
+            </div>
+            
+            <!-- Notlarım Section -->
+            <h2 class="section-title">Notlarım</h2>
+            
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Notlarımda ara...">
+                <button class="search-btn">🔍</button>
+            </div>
+            
+            <!-- Note Categories -->
+            <div class="note-categories">
+                <button class="category-btn active">Tümü</button>
+                <button class="category-btn">Dersler</button>
+                <button class="category-btn">Piyasa</button>
+                <button class="category-btn">Stratejiler</button>
+                <button class="category-btn">Haberler</button>
+            </div>
+            
+            <!-- Notes Grid -->
+            <div class="notes-grid">
+                <div class="note-card">
+                    <h3 class="note-title">Temel Analiz Notları</h3>
+                    <div class="note-preview">
+                        Şirket değerlemesi yaparken finansal tablolara bakılan temel göstergeler: P/E, EV/EBITDA, Fiyat/Defter Değeri, Temettü Verimi, Borç/Özkaynak oranı...
+                    </div>
+                    <div class="note-meta">
+                        <span>Oluşturulma: 18 Mart 2025</span>
+                        <span>Finans Dersi</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="note-action-btn">✏️</button>
+                        <button class="note-action-btn">🔖</button>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <h3 class="note-title">Teknik Analiz İpuçları</h3>
+                    <div class="note-preview">
+                        Hareketli ortalamalar, RSI, MACD, Bollinger Bantları kullanımı ve yorumlama teknikleri. Grafiklerde destek ve direnç noktalarını belirleme...
+                    </div>
+                    <div class="note-meta">
+                        <span>Oluşturulma: 15 Mart 2025</span>
+                        <span>Adım Adım Piyasa</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="note-action-btn">✏️</button>
+                        <button class="note-action-btn">🔖</button>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <h3 class="note-title">Risk Yönetimi</h3>
+                    <div class="note-preview">
+                        Portföyde risk yönetimi için: Pozisyon büyüklüğü, stop-loss seviyeleri, portföy çeşitlendirme, korelasyon analizi, volatilite hesaplama...
+                    </div>
+                    <div class="note-meta">
+                        <span>Oluşturulma: 12 Mart 2025</span>
+                        <span>Finans Dersi</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="note-action-btn">✏️</button>
+                        <button class="note-action-btn">🔖</button>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <h3 class="note-title">Borsa Jargonu</h3>
+                    <div class="note-preview">
+                        Ayı piyasası: Düşüş trendindeki piyasa. Boğa piyasası: Yükseliş trendindeki piyasa. Spread: Alış-satış fiyatı arasındaki fark...
+                    </div>
+                    <div class="note-meta">
+                        <span>Oluşturulma: 10 Mart 2025</span>
+                        <span>Borsa Temelleri</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="note-action-btn">✏️</button>
+                        <button class="note-action-btn">🔖</button>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <h3 class="note-title">Makroekonomik Göstergeler</h3>
+                    <div class="note-preview">
+                        Piyasaları etkileyen temel makroekonomik göstergeler: Enflasyon, işsizlik oranı, GDP, PMI, tüketici güveni, konut satışları...
+                    </div>
+                    <div class="note-meta">
+                        <span>Oluşturulma: 8 Mart 2025</span>
+                        <span>Ekonomi Dersi</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="note-action-btn">✏️</button>
+                        <button class="note-action-btn">🔖</button>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <h3 class="note-title">Yatırım Stratejileri</h3>
+                    <div class="note-preview">
+                        Değer yatırımı, büyüme yatırımı, gelir yatırımı, kontrarian yatırım yaklaşımlarının karşılaştırılması ve örnek portföy oluşturma...
+                    </div>
+                    <div class="note-meta">
+                        <span>Oluşturulma: 5 Mart 2025</span>
+                        <span>Strateji Dersi</span>
+                    </div>
+                    <div class="note-actions">
+                        <button class="note-action-btn">✏️</button>
+                        <button class="note-action-btn">🔖</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Notes -->
+            <h2 class="section-title">Son Düzenlenen Notlar</h2>
+            
+            <div class="recent-notes">
+                <div class="recent-note-list">
+                    <div class="recent-note-item">
+                        <div class="recent-note-title">Temel Analiz Notları</div>
+                        <div class="recent-note-meta">
+                            <span>Düzenleme: 18 Mart 2025, 14:30</span>
+                            <span>Finans Dersi</span>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-note-item">
+                        <div class="recent-note-title">Teknik Analiz İpuçları</div>
+                        <div class="recent-note-meta">
+                            <span>Düzenleme: 15 Mart 2025, 16:45</span>
+                            <span>Adım Adım Piyasa</span>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-note-item">
+                        <div class="recent-note-title">Risk Yönetimi</div>
+                        <div class="recent-note-meta">
+                            <span>Düzenleme: 12 Mart 2025, 10:15</span>
+                            <span>Finans Dersi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="avatar">
+                    <div class="user-icon">👤</div>
+                </div>
+                <div class="user-info">
+                    <h3>Osman Zorlu</h3>
+                    <p>Kullanıcı</p>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="derslerim.html">Derslerim</a></li>
+                <li><a href="#" class="active">Notlarım</a></li>
+                <li><a href="haberlerim.html">Haberlerim</a></li>
+                <li><a href="alistirmalar.html">Alıştırmalar</a></li>
+                <li><a href="duyurular.html">Duyurular</a></li>
+                <li><a href="anasayfa.html">Ana Sayfa</a></li>
+            </ul>
+            
+            <!-- Note Stats Widget -->
+            <div class="note-stats">
+                <div class="stats-title">Not İstatistikleri</div>
+                <div class="stat-item">
+                    <div class="stat-label">Toplam Not</div>
+                    <div class="stat-value">24</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Dersler</div>
+                    <div class="stat-value">10</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Piyasa</div>
+                    <div class="stat-value">8</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Stratejiler</div>
+                    <div class="stat-value">6</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Note Button -->
+    <div class="add-note-btn">+</div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Slider için JavaScript
+        let currentSlide = 0;
+        const slider = document.getElementById('newsSlider');
+        const slides = document.querySelectorAll('.news-item');
+        const slideWidth = 400; // Her haber öğesinin genişliği
+        const totalSlides = slides.length;
+        
+        // Otomatik kaydırma için interval
+        let slideInterval = setInterval(nextNews, 5000); // 5 saniyede bir sonraki habere geçer
+        
+        function nextNews() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSliderPosition();
+        }
+        
+        function prevNews() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSliderPosition();
+        }
+        
+        function updateSliderPosition() {
+            // Interval'i resetle, böylece manuel tıklamadan sonra tekrar başlasın
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextNews, 5000);
+            
+            // Slider pozisyonunu güncelle
+            slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+        }
+        
+        // Kategori butonları için JavaScript
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Aktif olan butondan class'ı kaldır
+                document.querySelector('.category-btn.active').classList.remove('active');
+                // Tıklanan butona active class'ı ekle
+                this.classList.add('active');
+                
+                // Burada gerçek bir filtreleme yapılabilir
+                // Örnek: this.textContent içeriğine göre notları filtrele
+            });
+        });
+        
+        // İlk yükleme sırasında otomatik oynatmayı başlat
+        updateSliderPosition();
+    </script>
+</body>
+</html>

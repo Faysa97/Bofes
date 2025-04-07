@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borsa Eğitim Platformu - Kayıt Ol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #121212;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(30deg, #121212 12%, transparent 12.5%, transparent 87%, #121212 87.5%, #121212),
+                linear-gradient(150deg, #121212 12%, transparent 12.5%, transparent 87%, #121212 87.5%, #121212),
+                linear-gradient(30deg, #121212 12%, transparent 12.5%, transparent 87%, #121212 87.5%, #121212),
+                linear-gradient(150deg, #121212 12%, transparent 12.5%, transparent 87%, #121212 87.5%, #121212),
+                linear-gradient(60deg, #20202077 25%, transparent 25.5%, transparent 75%, #20202077 75%, #20202077),
+                linear-gradient(60deg, #20202077 25%, transparent 25.5%, transparent 75%, #20202077 75%, #20202077);
+            background-size: 40px 70px;
+            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            height: 600px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
+            background-color: #00CED1;
+            background-image: linear-gradient(135deg, #00CED1 0%, #008B8B 100%);
+            color: white;
+            position: relative;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 15L65 35L50 55L35 35L50 15Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 120px 120px;
+            opacity: 0.4;
+        }
+
+        .left-panel h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .left-panel p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .benefits-list {
+            position: relative;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .benefit-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .benefit-text {
+            font-size: 1rem;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            color: #00CED1;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .register-form {
+            width: 100%;
+        }
+
+        .form-title {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #00CED1;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 206, 209, 0.2);
+        }
+
+        .input-group input::placeholder {
+            color: #888;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 18px;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .terms input {
+            margin-right: 8px;
+            margin-top: 3px;
+            accent-color: #00CED1;
+        }
+
+        .terms-link {
+            color: #00CED1;
+            text-decoration: none;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        .register-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #00CED1;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .register-button:hover {
+            background-color: #008B8B;
+        }
+
+        .login-text {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .login-link {
+            color: #00CED1;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .login-link:hover {
+            color: #008B8B;
+            text-decoration: underline;
+        }
+
+        .password-info {
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: -15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                width: 95%;
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-panel {
+                padding: 30px;
+            }
+
+            .right-panel {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Borsayı Öğrenmeye Başlayın</h1>
+            <p>Borsa Akademi ile finansal piyasalarda başarılı olmanız için gereken tüm temel bilgilere ve dahasına erişebilirsiniz.</p>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎓</div>
+                    <div class="benefit-text">Kapsamlı borsa eğitimleri ve webinarlar</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-text">Özel teknik analiz araçları</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">👥</div>
+                    <div class="benefit-text">Yatırımcı topluluğuna erişim</div>
+                </div>
+                
+                
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="logo">
+                <div class="logo-text">BORSA AKADEMI</div>
+            </div>
+            <div class="register-form">
+                <h2 class="form-title">Hesap Oluştur</h2>
+                <div class="input-group">
+                    <span class="input-icon">👤</span>
+                    <input type="text" placeholder="Ad Soyad" id="fullname">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" placeholder="E-posta adresiniz" id="email">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" placeholder="Telefon numaranız" id="phone">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" placeholder="Şifreniz" id="password">
+                </div>
+                <p class="password-info">Şifreniz en az 8 karakter olmalı, büyük/küçük harf ve rakam içermelidir.</p>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" placeholder="Şifrenizi tekrar girin" id="confirm-password">
+                </div>
+                <div class="terms">
+                    <input type="checkbox" id="terms">
+                    <label for="terms"><a href="#" class="terms-link">Kullanım şartlarını</a> ve <a href="#" class="terms-link">gizlilik politikasını</a> okudum, kabul ediyorum.</label>
+                </div>
+                <button class="register-button" id="registerBtn">HESAP OLUŞTUR</button>
+                <p class="login-text">
+                    Zaten hesabınız var mı? <a href="giris.html" class="login-link">Giriş yapın</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // Basit validasyon
+            if (!fullname || !email || !phone || !password || !confirmPassword) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Şifreler eşleşmiyor!');
+                return;
+            }
+            
+            if (!terms) {
+                alert('Devam etmek için kullanım şartlarını kabul etmelisiniz.');
+                return;
+            }
+            
+            // Şifre güvenliği kontrolü
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert('Şifreniz en az 8 karakter olmalı, büyük/küçük harf ve rakam içermelidir.');
+                return;
+            }
+            
+            // Gerçek uygulamada burada bir API çağrısı yapılırdı
+            console.log('Kayıt denemesi:', email);
+            
+            // Başarılı kayıt simülasyonu
+            alert('Hesabınız başarıyla oluşturuldu! Giriş sayfasına yönlendiriliyorsunuz...');
+            
+            // Giriş sayfasına yönlendirme
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

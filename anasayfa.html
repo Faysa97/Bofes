@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitim Platformu</title>
+    <style>
+        :root {
+            --turquoise: #00B3B3;
+            --dark-turquoise: #008080;
+            --black: #121212;
+            --dark-gray: #1E1E1E;
+            --medium-gray: #333333;
+            --light-gray: #454545;
+            --white: #FFFFFF;
+            --off-white: #E0E0E0;
+            --sidebar-width: 280px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            display: flex;
+            flex-direction: row; /* Yatay düzen */
+            min-height: 100vh;
+        }
+        
+        /* Ana içerik bölümü wrapper */
+        .main-wrapper {
+            width: calc(100% - var(--sidebar-width));
+            display: flex;
+            flex-direction: column;
+            height: auto; /* İçeriğin doğal yüksekliği */
+            overflow-y: auto; /* İçerik fazla olursa scroll yapabilsin */
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: var(--black);
+            padding: 25px 24px;
+            border-bottom: 2px solid var(--turquoise);
+            min-height: 120px;
+            position: relative; /* Static pozisyona yakın - sayfayla birlikte kaydırılacak */
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        /* Üst kısım için container */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        /* Alt kısım için container */
+        .header-bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 28px;
+            color: var(--turquoise);
+        }
+        
+        /* Kayan Haber Slider Styles */
+        .news-slider-container {
+            width: 500px;
+            position: relative;
+            overflow: hidden;
+            height: 45px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+        }
+        
+        .news-slider {
+            display: flex;
+            position: absolute;
+            left: 0;
+            transition: transform 0.5s ease;
+            width: 2500px;
+        }
+        
+        .news-item {
+            min-width: 500px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 16px;
+            color: var(--white);
+            font-size: 15px;
+        }
+        
+        .news-item strong {
+            color: var(--turquoise);
+            margin-right: 8px;
+        }
+        
+        .news-controls {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+        
+        .news-controls button {
+            width: 22px;
+            height: 22px;
+            background-color: var(--turquoise);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .news-controls button:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-buttons .btn {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .nav-buttons .btn:hover {
+            color: var(--turquoise);
+        }
+        
+        
+        
+        .nav-buttons .btn1 {
+            background-color: transparent;
+            color: var(--off-white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .nav-buttons .btn1:hover {
+            color: var(--turquoise);
+        }
+
+        /* Main Container */
+        .container {
+            flex: 1;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 24px;
+        }
+        
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .nav-arrows {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .arrow {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .arrow:hover {
+            background-color: var(--turquoise);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--off-white);
+            border-bottom: 2px solid var(--turquoise);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        
+        /* Video Cards */
+        .video-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        
+        .video-card {
+            width: 280px;
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 179, 179, 0.2);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            height: 160px;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .play-button {
+            width: 50px;
+            height: 50px;
+            background-color: var(--turquoise);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .play-icon {
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent var(--white);
+            margin-left: 4px;
+        }
+        
+        .video-info {
+            padding: 16px;
+        }
+        
+        .video-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .video-author {
+            color: var(--off-white);
+            font-size: 14px;
+        }
+        
+        /* Announcements */
+        .announcements {
+            margin-bottom: 32px;
+        }
+        
+        .announcement-card {
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--turquoise);
+        }
+        
+        .announcement-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .announcement-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--off-white);
+            margin-bottom: 8px;
+        }
+        
+        .announcement-link {
+            color: var(--turquoise);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .announcement-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Social Media Section */
+        .social-media {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        
+        .social-card {
+            width: 280px;
+            height: 300px;
+            background-color: var(--medium-gray);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+        }
+        
+        .social-platform {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-weight: 600;
+            color: var(--turquoise);
+        }
+        
+        .social-content {
+            margin-top: 32px;
+            height: calc(100% - 32px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--off-white);
+        }
+        
+        /* Sidebar - Yeniden düzenlendi */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--black);
+            padding: 24px;
+            border-left: 1px solid var(--medium-gray);
+            position: fixed; /* Sabit pozisyon - scroll olduğunda yerinde kalır */
+            top: 0;
+            right: 0; /* Sağ tarafta sabit */
+            height: 100vh; /* Tam ekran yüksekliği */
+            overflow-y: auto; /* İçerik fazla olursa scroll yapabilsin */
+            z-index: 1001; /* Header'dan daha yüksek z-index */
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            margin-top: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--medium-gray);
+            border-radius: 50%;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--turquoise);
+        }
+        
+        .user-icon {
+            color: var(--off-white);
+            font-size: 24px;
+        }
+        
+        .user-info h3 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            color: var(--turquoise);
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 16px;
+        }
+        
+        .sidebar-menu a {
+            color: var(--off-white);
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: color 0.3s;
+        }
+        
+        .sidebar-menu a:hover {
+            color: var(--turquoise);
+        }
+        
+        .sidebar-menu a.active {
+            color: var(--turquoise);
+            font-weight: 600;
+        }
+        
+        /* Live Support */
+        .live-support {
+            position: fixed;
+            bottom: 24px;
+            right: calc(var(--sidebar-width) + 24px);
+            background-color: var(--turquoise);
+            color: var(--white);
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 179, 179, 0.3);
+            transition: background-color 0.3s;
+            z-index: 1000;
+        }
+        
+        .live-support:hover {
+            background-color: var(--dark-turquoise);
+        }
+        
+        /* Responsive tasarım için medya sorguları */
+        @media (max-width: 1024px) {
+            .news-slider-container {
+                width: 400px;
+            }
+            
+            .news-item {
+                min-width: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .main-wrapper {
+                width: 100%;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative; /* Mobil görünümde sabit değil */
+                border-left: none;
+                border-top: 1px solid var(--medium-gray);
+                right: auto;
+                top: auto;
+            }
+            
+            .live-support {
+                right: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ana içerik wrapper'ı -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header>
+            <!-- Üst kısım -->
+            <div class="header-top">
+                <div class="logo">BOFES</div>
+                
+                <div class="nav-buttons">
+                    <button class="btn">👤 Profil</button>
+                    <button class="btn1">🔔 Bildirimler</button>
+                </div>
+            </div>
+            
+            <!-- Alt kısım -->
+            <div class="header-bottom">
+                <!-- Kayan Finans Haberleri -->
+                <div class="news-slider-container">
+                    <div class="news-slider" id="newsSlider">
+                        <div class="news-item"><strong>BIST100:</strong> Borsa İstanbul günü %1.2 yükselişle kapattı</div>
+                        <div class="news-item"><strong>Dolar/TL:</strong> Dolar 32.45 seviyesinde işlem görüyor</div>
+                        <div class="news-item"><strong>Euro/TL:</strong> Euro 35.10 seviyesinde işlem görüyor</div>
+                        <div class="news-item"><strong>Altın:</strong> Gram altın 2.350 TL seviyesinde</div>
+                        <div class="news-item"><strong>Bitcoin:</strong> BTC 59.000 dolar seviyesinde</div>
+                    </div>
+                    <div class="news-controls">
+                        <button onclick="prevNews()">◀</button>
+                        <button onclick="nextNews()">▶</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="main-nav">
+                    <div class="nav-arrows">
+                        <div class="arrow">←</div>
+                        <div class="arrow">→</div>
+                    </div>
+                </div>
+                
+                <!-- Video Sections -->
+                <h2 class="section-title">Ana Sayfa</h2>
+                
+                <div class="video-cards">
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <div class="play-icon"></div>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Finansa Giriş</div>
+                            <div class="video-author">Anlatıcı: Osman Zorlu</div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <div class="play-icon"></div>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Adım Adım Piyasa</div>
+                            <div class="video-author">Anlatıcı: Osman Zorlu</div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <div class="play-icon"></div>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Borsa Analizleri</div>
+                            <div class="video-author">Anlatıcı: Osman Zorlu</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Announcements -->
+                <h2 class="section-title">Ders Duyuruları</h2>
+                
+                <div class="announcements">
+                    <div class="announcement-card">
+                        <div class="announcement-title">Finans ve Borsa İncelemeleri</div>
+                        <div class="announcement-meta">
+                            <span>Saat: 20:00</span>
+                            <span>Anlatıcı: Osman Zorlu</span>
+                        </div>
+                        <a href="#" class="announcement-link">Zoom →</a>
+                    </div>
+                    
+                    <div class="announcement-card">
+                        <div class="announcement-title">Haftalık Ekonomi Değerlendirmesi</div>
+                        <div class="announcement-meta">
+                            <span>Saat: 18:30</span>
+                            <span>Anlatıcı: Osman Zorlu</span>
+                        </div>
+                        <a href="#" class="announcement-link">Zoom →</a>
+                    </div>
+                </div>
+                
+                <!-- Social Media -->
+                <h2 class="section-title">Sosyal Medya Paylaşımları</h2>
+                
+                <div class="social-media">
+                    <div class="social-card">
+                        <div class="social-platform">Instagram Gönderileri</div>
+                        <div class="social-content">
+                            Instagram içeriği burada görüntülenecek
+                        </div>
+                    </div>
+                    
+                    <div class="social-card">
+                        <div class="social-platform">X Gönderileri</div>
+                        <div class="social-content">
+                            X (Twitter) içeriği burada görüntülenecek
+                        </div>
+                    </div>
+                    
+                    <div class="social-card">
+                        <div class="social-platform">YouTube</div>
+                        <div class="social-content">
+                            YouTube içeriği burada görüntülenecek
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="avatar">
+                <div class="user-icon">👤</div>
+            </div>
+            <div class="user-info">
+                <h3>Osman Zorlu</h3>
+                <p>Kullanıcı</p>
+            </div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="derslerim.html">Derslerim</a></li>
+            <li><a href="notlarim.html">Notlarım</a></li>
+            <li><a href="haberlerim.html">Haberlerim</a></li>
+            <li><a href="arastirmalar.html">Araştırmalar</a></li>
+            <li><a href="duyurular.html">Duyurular</a></li>
+        </ul>
+    </div>
+    
+    <!-- Live Support -->
+    <div class="live-support">CANLI DESTEK</div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Slider için JavaScript
+        let currentSlide = 0;
+        const slider = document.getElementById('newsSlider');
+        const slides = document.querySelectorAll('.news-item');
+        const slideWidth = 500; // Her haber öğesinin genişliği
+        const totalSlides = slides.length;
+        
+        // Otomatik kaydırma için interval
+        let slideInterval = setInterval(nextNews, 5000); // 5 saniyede bir sonraki habere geçer
+        
+        function nextNews() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSliderPosition();
+        }
+        
+        function prevNews() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSliderPosition();
+        }
+        
+        function updateSliderPosition() {
+            // Interval'i resetle, böylece manuel tıklamadan sonra tekrar başlasın
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextNews, 5000);
+            
+            // Slider pozisyonunu güncelle
+            slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+        }
+        
+        // İlk yükleme sırasında otomatik oynatmayı başlat
+        updateSliderPosition();
+        
+        // Ekran boyutu değiştiğinde slideWidth değerini güncelle
+        function updateSlideWidth() {
+            const newsContainer = document.querySelector('.news-slider-container');
+            if (window.innerWidth <= 1024 && window.innerWidth > 768) {
+                return 400; // Tablet genişliği
+            } else {
+                return 500; // Varsayılan genişlik
+            }
+        }
+        
+        window.addEventListener('resize', function() {
+            const newSlideWidth = updateSlideWidth();
+            if (newSlideWidth !== slideWidth) {
+                slideWidth = newSlideWidth;
+                updateSliderPosition();
+            }
+        });
+
+        document.querySelector('.btn').addEventListener('click', function(event) {
+           
+            window.location.href = "profil.html"; 
+        });
+
+        document.querySelector('.btn1').addEventListener('click', function(event) {
+           
+           window.location.href = "bildirimler.html"; 
+       });
+        
+    </script>
+</body>
+</html>
